@@ -1,4 +1,4 @@
-
+import numpy as np
 
 def load_keel_dataset(dataset, fold, kind, prefix, module, fold_count=5):
     if kind not in ['tra', 'tst']:
