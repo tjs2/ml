@@ -11,7 +11,8 @@ def plot_and_save(X, y, x_lim=(-10,10), y_lim=(-10,10), markers=['bs', 'ro', 'k^
 
     for lbl, mkr in zip(set(y), markers):
         mask = y == lbl
-        plt.plot(X[:,0], X[:,1], mkr)
+        _X = X[mask]
+        plt.plot(_X[:,0], _X[:,1], mkr)
     
     plt.savefig(filename)
     plt.clf() 
