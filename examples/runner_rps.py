@@ -1,33 +1,413 @@
 # coding: utf-8
-import numpy as np
+import numpy  as np
+import random as rd
+import time   as tm
 from runner import Runner
-from mlcin.prototypes.rps import RandomPrototypeSelection
 
 
-class RunnerRPS(Runner):
+"""
+Federal University of Pernambuco
+Center of Informatic
+Authors: Tiago José & Tiago Neves
+Algorithm: ENPC
+"""
+
+
+class ENPC:
+    
+    setInstancias       = None          # Conjunto de instancias
+    setClassesIntancias = None          # Classes de cada instancia
+
+    V  = None                           # Guarda o Vij
+    R  = None                           # Dados sobre o prototipo    
+    Rclasses = None                     # Guarda a classe dos prototipos    
+    quality  = None                     # Guarda o quality de cada prototipo
+    
+    qtdClasses    = None                # Guarda a quantidade de classes
+    qtdAtributos  = None                # Guarda a quantidade de atributos
+    qtdInstancias = None                # Guarda o numero de instancias que o conjunto de treinamento tem
+    
+    maxIteracoes = 20                   # Numero maximo que o algoritmo iterara    
+
+
+    """
+    " Construtor
+    """
+    def __init__( self, X, y ):
+        
+        self.setInstancias = X
+        self.setClassesIntancias = y
+        
+        y_sort = np.sort(y)
+        
+        self.qtdClasses    = y_sort[-1]
+        self.qtdInstancias = np.size( self.setInstancias, 0 )
+        self.qtdAtributos  = np.size( self.setInstancias, 1 )
+
+
+    """
+    " Funções auxiliares
+    """
+    def printInformation( self ):
+        
+        print "Valor de V: "
+        print self.V
+        print "Valor de R: "
+        print self.R
+        print "Valor de Classes de R: "
+        print self.Rclasses
+        print "Qualidades de R: "
+        print self.quality
+        print "\n\n\n"
+
+
+    def preencherMatrizComListaVazia( self, matriz ):
+        
+        m, n = np.size( matriz, 0 ), np.size( matriz, 1 )        
+        i, j = 0, 0        
+        
+        while( i < m ):
+            j = 0
+            while( j < n ):
+                matriz[i][j] = []            
+                j = j + 1            
+            i = i + 1
+
+
+    def prune( self ):
+        
+        prot, numPrototipos = 0, np.size( self.R, 0 )
+        classe, soma = 0, 0
+        
+        while( prot < numPrototipos ):
+            
+            classe, soma = 0, 0
+            while( classe < self.qtdClasses ):
+                soma = soma + np.size( self.V[prot][classe] )
+                classe = classe + 1
+            
+            if( soma == 0 ):
+                self.R = np.delete( self.R, prot, 0 )
+            
+            prot = prot + 1
+
+
+    def sumRi( self, i ):
+        
+        sum, j = 0, 0   
+        while( j < self.qtdClasses ):
+            sum = sum + np.size( self.V[i][j] )
+            j = j + 1
+            
+        return sum
+
+
+    """
+    " Funções do artigo
+    """
+    def distancia( self, v1, v2 ):
+        
+        v = np.subtract( v1, v2 )
+        v = np.multiply( v, v )
+        v = np.sum( v )
+        v = np.sqrt( v )
+        
+        return v
+
+
+    def centroide( self, Vij ):
+        
+        v = np.zeros_like( self.setInstancias[Vij[0]] )        
+        nearsLista = np.copy( Vij )
+        
+        for indice in nearsLista:
+            v = np.add( v, self.setInstancias[indice] )
+            
+        v = np.divide( v, np.size( Vij ) )
+
+        return v
+
+
+    def Expectation( self, jclasse ):
+        
+        regions = 0
+        Sj = 0
+        
+        numPrototipos = np.size( self.R, 0 )
+        
+        i = 0
+        while( i < numPrototipos ):
+            if( self.Rclasses[i] == jclasse ):
+                regions = regions + 1
+            i = i + 1
+        
+        i = 0
+        while( i < numPrototipos ):
+            Sj = Sj + np.size( self.V[i][jclasse-1] )
+            i = i + 1
+        
+        return float(Sj)/float(regions)
+
+
+    def Apportation( self, iPrototipo, jclasse ):
+        
+        sumVij = np.size( self.V[iPrototipo][jclasse-1] )
+        
+        return float(2*sumVij)/float(self.Expectation(jclasse))
+
+
+    def Accuracy( self, iPrototipo, jclasse ):
+        
+        sumVij = np.size( self.V[iPrototipo][jclasse-1] )
+        sumRi  = 0
+        
+        classe = 0
+        while( classe < self.qtdClasses ):
+            sumRi = sumRi + np.size( self.V[iPrototipo][classe] )
+            classe = classe + 1
+
+        return float(sumVij)/float(sumRi)
+
+
+    def Quality( self, iPrototipo, jClasse ):
+        
+        return float( min( 1, self.Apportation( iPrototipo, jClasse ) * self.Accuracy( iPrototipo, jClasse ) ) )
+    
+
+    def getInformation( self ):
+
+        i, j = None, None
+        inst, prot = 0, 0
+        dist, dMin = 0, 0
+
+        n, m = np.size( self.R, 0 ), self.qtdInstancias
+
+        self.quality = np.empty( n )
+
+        self.V = np.empty([n, self.qtdClasses], list)
+        self.preencherMatrizComListaVazia( self.V )
+
+        while( inst < m ):
+            
+            dMin = float("inf")
+            prot = 0
+            
+            while( prot < n ):          
+            
+                dist = self.distancia( self.R[prot], self.setInstancias[inst] )
+                if( dist < dMin ):
+                    
+                    dMin = dist
+                    i = prot
+            
+                prot = prot + 1
+            
+            j = self.setClassesIntancias[inst] - 1
+            
+            self.V[i][j] = self.V[i][j] + [inst]
+            
+            inst = inst + 1
+
+        prot = 0
+        while( prot < n ):
+            
+            if( self.sumRi( prot ) == 0 ):
+                self.V = np.delete( self.V, prot, 0 )
+                self.R = np.delete( self.R, prot, 0 )
+                self.Rclasses = np.delete( self.Rclasses, prot, 0 )
+                self.quality  = np.delete( self.quality, prot, 0 )
+                n = n - 1
+                prot = prot - 1
+            
+            prot = prot + 1
+
+        prot = 0
+        while( prot < n ):
+            self.quality[prot] = self.Quality( prot, self.Rclasses[prot] )
+            prot = prot + 1
+
+
+    def mutation( self ):
+        
+        i, j, qtd, qtdMax = 0, 0, 0, 0
+        
+        classe = -1
+        
+        qtdPrototipos = np.size( self.R, 0 )
+        
+        while( i < qtdPrototipos ):
+            
+            j, qtdMax = 0, 0
+            while( j < self.qtdClasses ):
+                
+                qtd = np.size( self.V[i][j] )
+                
+                if( qtd > qtdMax ):
+                    classe = j+1
+                    qtdMax = qtd
+                    
+                j = j + 1
+            
+            if( qtdMax != 0 ):
+                self.Rclasses[i] = classe
+                
+            i = i + 1
+
+
+    def reprodution( self ):
+        
+        i, j, soma, sizeRoleta, classe = 0, 0, 0, 0, None
+        qtdPrototipos = np.size( self.R, 0 )
+        
+        while( i < qtdPrototipos ):
+            
+            sizeRoleta, j = 0, 0
+            while( j < self.qtdClasses ):
+                sizeRoleta = sizeRoleta + np.size( self.V[i][j] )            
+                j = j + 1
+                
+            roleta = rd.randrange(0, sizeRoleta)
+            
+            j, soma = 0, 0
+            while( j < self.qtdClasses ):
+                soma = soma + np.size( self.V[i][j] )
+                if( roleta < soma ):
+                    classe = j + 1
+                    break
+                j = j + 1
+            
+            j = classe - 1
+            
+            if( classe != self.Rclasses[i] ):
+                newPrototipo = self.centroide( self.V[i][j] )
+                self.R = np.concatenate( (self.R, [newPrototipo]), 0 )
+                self.Rclasses = np.concatenate( ( self.Rclasses, [classe] ), 0 )
+            
+            i = i + 1
+
+
+    def move( self ):
+        
+        iPrototipo, jClasse, kAtributo = 0, 0, 0
+        qtdPrototipos = np.size( self.R, 0 )
+        
+        while( iPrototipo < qtdPrototipos ):
+            
+            jClasse = self.Rclasses[iPrototipo]
+            
+            if( np.size( self.V[iPrototipo][jClasse-1] ) > 0 ):                
+                self.R[iPrototipo] = self.centroide( self.V[iPrototipo][jClasse-1] )
+            
+            iPrototipo = iPrototipo + 1
+
+
+    def die( self ):
+        
+        qtdPrototipos, pDie = np.size( self.R, 0 ), 0
+
+        prot = 0
+        while( prot < qtdPrototipos ):
+            
+            if( self.quality[prot] > 0.5 ):
+                pDie = 0.0
+            else:
+                pDie = 1 - 2*self.quality[prot]
+            
+            randon_num = rd.random()
+            
+            if( randon_num < pDie ):
+                self.R = np.delete( self.R, prot, 0 )
+                self.Rclasses = np.delete( self.Rclasses, prot, 0 )
+                qtdPrototipos = qtdPrototipos - 1
+            
+            prot = prot + 1
+
+
+    def run_ENPC( self ):
+        
+        rd.seed(None)
+        i = rd.randrange(0, self.qtdInstancias-1)
+
+        self.R           = np.empty([1, np.size(self.setInstancias[0])])
+        self.Rclasses    = np.empty( 1 )
+        self.R[0]        = np.copy( self.setInstancias[i] )
+        self.Rclasses[0] = self.setClassesIntancias[i]
+
+        iteracoes = 1
+        
+        while( iteracoes <= self.maxIteracoes ):
+        
+            ## Get Information
+            #print "Get Information: \n"
+            self.getInformation()
+            #self.printInformation()
+
+            ## Mutation
+            #print "Mutation: \n"
+            self.mutation()
+            #self.printInformation()
+            
+            ## Reproduction
+            #print "Reproduction: \n"
+            self.reprodution()
+            self.getInformation()
+            #self.printInformation()
+            
+            ## Fight
+            #print "Fight: \n"
+            #self.fight()
+            #self.printInformation()
+            
+            ## Move
+            #print "Move: \n"
+            self.move()
+            #self.printInformation()
+            
+            ## Die
+            #print "Die: \n"
+            self.die()
+            #self.printInformation()
+            #print i
+        
+            iteracoes = iteracoes + 1
+
+
+    """
+    " Obtenção do resultado
+    """
+    def getResult( self ):
+        
+        #print "Terminou"
+        return self.R, self.Rclasses
+
+
+
+
+class RunnerRPS( Runner ):
 
     def get_prototypes(self, X, y):
-        rps = RandomPrototypeSelection()
-        rps.fit(X, y).reduce_data()
-        return rps.get_prototypes()
+
+        enpc = ENPC( X, y )
+        enpc.run_ENPC()
+        
+        return enpc.getResult()
+
 
 if __name__ == '__main__':
-    runner = RunnerRPS(
-        folds=5,
-        normalize=True,
-        prefix='datasets',
-        module='imbalanced')
 
-    datasets = ['glass1', 'ecoli-0_vs_1', 'iris0', 'glass0']
-    datasets = datasets + ['ecoli1', 'new-thyroid2', 'new-thyroid1', 'ecoli2']
-    datasets = datasets + [
-        'glass6',
-        'glass2',
-        'shuttle-c2-vs-c4',
-        'glass-0-1-6_vs_5']
+    runner = RunnerRPS( folds=5, normalize=True, prefix='datasets', module='imbalanced')
+    
+    datasets =            ['glass1', 'ecoli-0_vs_1', 'iris0'           , 'glass0'          ]
+    datasets = datasets + ['ecoli1', 'new-thyroid2', 'new-thyroid1'    , 'ecoli2'          ]
+    datasets = datasets + ['glass6', 'glass2'      , 'shuttle-c2-vs-c4', 'glass-0-1-6_vs_5']
+    
     runner.set_datasets(datasets)
 
+    beginTime = tm.time()
     runner.run()
+    endTime = tm.time()
+    
+    print "\nTempo: ",( endTime - beginTime), " Segundos\n"
 
     output = 'dataset\tGen. Accuracy\tMaj. Accuracy\tMin. Accuracy\t'
     output = output + 'AUC. Accuracy\tData Reduction\n'
