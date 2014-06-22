@@ -3,6 +3,7 @@ import numpy  as np
 import random as rd
 import time   as tm
 from runner import Runner
+from sklearn.neighbors import NearestNeighbors
 
 
 """
@@ -27,7 +28,7 @@ class ENPC:
     qtdAtributos  = None                # Guarda a quantidade de atributos
     qtdInstancias = None                # Guarda o numero de instancias que o conjunto de treinamento tem
     
-    maxIteracoes = 20                   # Numero maximo que o algoritmo iterara    
+    maxIteracoes = 10                   # Numero maximo que o algoritmo iterara    
 
 
     """
@@ -237,7 +238,7 @@ class ENPC:
         
         while( i < qtdPrototipos ):
             
-            j, qtdMax = 0, 0
+            j, qtdMax = 0, -float("inf")
             while( j < self.qtdClasses ):
                 
                 qtd = np.size( self.V[i][j] )
@@ -284,6 +285,40 @@ class ENPC:
                 self.Rclasses = np.concatenate( ( self.Rclasses, [classe] ), 0 )
             
             i = i + 1
+
+
+    def fight( self ):
+        
+        if( np.size( self.R, 0 ) > 1 ):
+
+            qMax, idesafiador = 0, None
+
+            neigh = NearestNeighbors( )
+            neigh.fit( self.R )
+            neighbors = neigh.kneighbors( self.R, 3, False )
+            
+            neighbors = np.delete( neighbors, 0, 1 )
+            
+            for iPrototipo, prototipo in enumerate( self.R ):
+                
+                qMax, idesafiador = -float("inf"), None
+                for iNeighbor in neighbors[iPrototipo]:
+                    
+                    difQuality = abs( self.quality[iPrototipo] - self.quality[iNeighbor] )
+                    
+                    if( difQuality  > qMax ):
+                        
+                        qMax = difQuality
+                        idesafiador = iNeighbor
+                
+                randon_num = rd.random()
+                
+                if( randon_num < qMax ):
+                    
+                    if( self.Rclasses[idesafiador] != self.Rclasses[iPrototipo] ):
+                        print "\nCooperação\n"
+                    else:
+                        print "\nDisputa\n"
 
 
     def move( self ):
@@ -355,12 +390,13 @@ class ENPC:
             
             ## Fight
             #print "Fight: \n"
-            #self.fight()
+            self.fight()
             #self.printInformation()
             
             ## Move
             #print "Move: \n"
             self.move()
+            self.getInformation()
             #self.printInformation()
             
             ## Die
@@ -407,7 +443,7 @@ if __name__ == '__main__':
     runner.run()
     endTime = tm.time()
     
-    print "\nTempo: ",( endTime - beginTime), " Segundos\n"
+    print "\nTempo: ",(endTime - beginTime), " Segundos\n"
 
     output = 'dataset\tGen. Accuracy\tMaj. Accuracy\tMin. Accuracy\t'
     output = output + 'AUC. Accuracy\tData Reduction\n'
