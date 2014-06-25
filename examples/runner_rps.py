@@ -16,6 +16,8 @@ Algorithm: ENPC
 
 class ENPC:
     
+    K = 3                               # KNN
+    
     setInstancias       = None          # Conjunto de instancias
     setClassesIntancias = None          # Classes de cada instancia
 
@@ -28,7 +30,7 @@ class ENPC:
     qtdAtributos  = None                # Guarda a quantidade de atributos
     qtdInstancias = None                # Guarda o numero de instancias que o conjunto de treinamento tem
     
-    maxIteracoes = 100                   # Numero maximo que o algoritmo iterara    
+    maxIteracoes = 20                   # Numero maximo que o algoritmo iterara    
 
 
     """
@@ -77,19 +79,25 @@ class ENPC:
 
     def prune( self ):
         
-        prot, numPrototipos = 0, np.size( self.R, 0 )
-        classe, soma = 0, 0
-        
-        while( prot < numPrototipos ):
+        prot, n = 0, np.size( self.R, 0 )
+        while( prot < n ):
             
-            classe, soma = 0, 0
-            while( classe < self.qtdClasses ):
-                soma = soma + np.size( self.V[prot][classe] )
-                classe = classe + 1
-            
-            if( soma == 0 ):
+            if( self.sumRi( prot ) == 0 ):
+                self.V = np.delete( self.V, prot, 0 )
                 self.R = np.delete( self.R, prot, 0 )
+                self.Rclasses = np.delete( self.Rclasses, prot, 0 )
+                self.quality  = np.delete( self.quality, prot, 0 )
+                n = n - 1
+                prot = prot - 1
             
+            prot = prot + 1
+
+
+    def getQuality( self ):
+        
+        prot, n = 0, np.size( self.R, 0 )
+        while( prot < n ):
+            self.quality[prot] = self.Quality( prot, self.Rclasses[prot] )
             prot = prot + 1
 
 
@@ -209,23 +217,8 @@ class ENPC:
             
             inst = inst + 1
 
-        prot = 0
-        while( prot < n ):
-            
-            if( self.sumRi( prot ) == 0 ):
-                self.V = np.delete( self.V, prot, 0 )
-                self.R = np.delete( self.R, prot, 0 )
-                self.Rclasses = np.delete( self.Rclasses, prot, 0 )
-                self.quality  = np.delete( self.quality, prot, 0 )
-                n = n - 1
-                prot = prot - 1
-            
-            prot = prot + 1
-
-        prot = 0
-        while( prot < n ):
-            self.quality[prot] = self.Quality( prot, self.Rclasses[prot] )
-            prot = prot + 1
+        self.prune( )
+        self.getQuality( )
 
 
     def mutation( self ):
@@ -295,7 +288,7 @@ class ENPC:
 
             neigh = NearestNeighbors( )
             neigh.fit( self.R )
-            neighbors = neigh.kneighbors( self.R, 3, False )
+            neighbors = neigh.kneighbors( self.R, self.K, False )
             
             neighbors = np.delete( neighbors, 0, 1 )
             
@@ -363,13 +356,13 @@ class ENPC:
             else:
                 pDie = 1 - 2*self.quality[prot]
             
-            randon_num = rd.random()
+                randon_num = rd.random()
             
-            if( randon_num < pDie ):
-                self.R = np.delete( self.R, prot, 0 )
-                self.Rclasses = np.delete( self.Rclasses, prot, 0 )
-                qtdPrototipos = qtdPrototipos - 1
-            
+                if( randon_num < pDie ):
+                    self.R = np.delete( self.R, prot, 0 )
+                    self.Rclasses = np.delete( self.Rclasses, prot, 0 )
+                    qtdPrototipos = qtdPrototipos - 1
+
             prot = prot + 1
 
 
@@ -406,12 +399,13 @@ class ENPC:
             ## Fight
             #print "Fight: \n"
             self.fight()
+            self.prune()
             #self.printInformation()
             
             ## Move
             #print "Move: \n"
             self.move()
-            #self.getInformation()
+            self.getQuality()
             #self.printInformation()
             
             ## Die
