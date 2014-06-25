@@ -30,7 +30,7 @@ class ENPC:
     qtdAtributos  = None                # Guarda a quantidade de atributos
     qtdInstancias = None                # Guarda o numero de instancias que o conjunto de treinamento tem
     
-    maxIteracoes = 20                   # Numero maximo que o algoritmo iterara    
+    maxIteracoes = 2                   # Numero maximo que o algoritmo iterara    
 
 
     """
@@ -192,7 +192,6 @@ class ENPC:
         n, m = np.size( self.R, 0 ), self.qtdInstancias
 
         self.quality = np.empty( n )
-
         self.V = np.empty([n, self.qtdClasses], list)
         self.preencherMatrizComListaVazia( self.V )
 
@@ -377,7 +376,7 @@ class ENPC:
         self.Rclasses[0] = self.setClassesIntancias[i]
 
         iteracoes = 1
-        
+
         while( iteracoes <= self.maxIteracoes ):
         
             ## Get Information
@@ -440,11 +439,25 @@ class RunnerRPS( Runner ):
 
 if __name__ == '__main__':
 
-    runner = RunnerRPS( folds=5, normalize=True, prefix='datasets', module='imbalanced')
     
-    datasets =            ['glass1', 'ecoli-0_vs_1', 'iris0'           , 'glass0'          ]
-    datasets = datasets + ['ecoli1', 'new-thyroid2', 'new-thyroid1'    , 'ecoli2'          ]
-    datasets = datasets + ['glass6', 'glass2'      , 'shuttle-c2-vs-c4', 'glass-0-1-6_vs_5']
+    modulo = 'regular10'
+    
+    if( modulo == 'regular10' ):
+    
+        runner = RunnerRPS( folds=5, normalize=True, prefix='datasets', module=modulo )
+    
+        datasets =            ['glass'   , 'image_segmentation', 'ionosphere'   , 'iris'  ]
+        datasets = datasets + ['liver'   , 'pendigits'         , 'pima_diabetes', 'sonar' ]
+        datasets = datasets + ['spambase', 'vehicle'           , 'vowel'        , 'wine'  , 'yeast' ]
+        
+    elif( modulo == 'imbalanced' ):
+    
+        runner = RunnerRPS( folds=9, normalize=True, prefix='datasets', module=modulo )
+    
+        datasets =            ['glass1', 'ecoli-0_vs_1', 'iris0'           , 'glass0'          ]
+        datasets = datasets + ['ecoli1', 'new-thyroid2', 'new-thyroid1'    , 'ecoli2'          ]
+        datasets = datasets + ['glass6', 'glass2'      , 'shuttle-c2-vs-c4', 'glass-0-1-6_vs_5']
+    
     
     runner.set_datasets(datasets)
 
