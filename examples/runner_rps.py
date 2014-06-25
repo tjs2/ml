@@ -28,7 +28,7 @@ class ENPC:
     qtdAtributos  = None                # Guarda a quantidade de atributos
     qtdInstancias = None                # Guarda o numero de instancias que o conjunto de treinamento tem
     
-    maxIteracoes = 10                   # Numero maximo que o algoritmo iterara    
+    maxIteracoes = 100                   # Numero maximo que o algoritmo iterara    
 
 
     """
@@ -291,7 +291,7 @@ class ENPC:
         
         if( np.size( self.R, 0 ) > 1 ):
 
-            qMax, idesafiador = 0, None
+            qMax, iDesafiador, jPrototipo, jdesafiador = 0, None, None, None
 
             neigh = NearestNeighbors( )
             neigh.fit( self.R )
@@ -301,7 +301,7 @@ class ENPC:
             
             for iPrototipo, prototipo in enumerate( self.R ):
                 
-                qMax, idesafiador = -float("inf"), None
+                qMax, iDesafiador = -float("inf"), None
                 for iNeighbor in neighbors[iPrototipo]:
                     
                     difQuality = abs( self.quality[iPrototipo] - self.quality[iNeighbor] )
@@ -309,16 +309,31 @@ class ENPC:
                     if( difQuality  > qMax ):
                         
                         qMax = difQuality
-                        idesafiador = iNeighbor
+                        iDesafiador = iNeighbor
                 
                 randon_num = rd.random()
                 
                 if( randon_num < qMax ):
                     
-                    if( self.Rclasses[idesafiador] != self.Rclasses[iPrototipo] ):
-                        print "\nCooperação\n"
+                    jPrototipo, jdesafiador = self.Rclasses[iPrototipo] - 1, self.Rclasses[iDesafiador] - 1
+                    
+                    if( self.Rclasses[iDesafiador] != self.Rclasses[iPrototipo] ):
+                                                
+                        self.V[iPrototipo][jPrototipo] = self.V[iPrototipo][jPrototipo] + self.V[iDesafiador][jPrototipo]
+                        self.V[iDesafiador][jPrototipo] = []
+                        
                     else:
-                        print "\nDisputa\n"
+                        
+                        sizeRoleta = int((self.quality[iPrototipo] + self.quality[iDesafiador])*100)
+                        randon_num = rd.randrange(0, sizeRoleta)
+                        
+                        if( randon_num < int(self.quality[iPrototipo]*100) ):
+                            
+                            self.V[iPrototipo][jPrototipo]  = self.V[iPrototipo][jPrototipo] + self.V[iDesafiador][jPrototipo]
+                            self.V[iDesafiador][jPrototipo] = []
+                        else:
+                            self.V[iDesafiador][jdesafiador] = self.V[iDesafiador][jdesafiador] + self.V[iPrototipo][jdesafiador]
+                            self.V[iPrototipo][jdesafiador]  = []
 
 
     def move( self ):
@@ -396,7 +411,7 @@ class ENPC:
             ## Move
             #print "Move: \n"
             self.move()
-            self.getInformation()
+            #self.getInformation()
             #self.printInformation()
             
             ## Die
