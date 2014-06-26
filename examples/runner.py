@@ -8,7 +8,7 @@ from mlcin.utils import data
 class Runner(object):
 
     def __init__(self, folds=5, normalize=True, prefix=None, module=None):
-        self.folds = 5
+        self.folds = folds
         self.normalize = normalize
         self.prefix = prefix
         self.module = module

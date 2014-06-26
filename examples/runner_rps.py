@@ -16,6 +16,8 @@ Algorithm: ENPC
 
 class ENPC:
     
+    _zeroInClasse = False
+    
     K = 3                               # KNN
     
     setInstancias       = None          # Conjunto de instancias
@@ -30,7 +32,7 @@ class ENPC:
     qtdAtributos  = None                # Guarda a quantidade de atributos
     qtdInstancias = None                # Guarda o numero de instancias que o conjunto de treinamento tem
     
-    maxIteracoes = 2                   # Numero maximo que o algoritmo iterara    
+    maxIteracoes = 10                   # Numero maximo que o algoritmo iterara
 
 
     """
@@ -38,12 +40,16 @@ class ENPC:
     """
     def __init__( self, X, y ):
         
-        self.setInstancias = X
-        self.setClassesIntancias = y
-        
+        if( 0 in y ):
+            self._zeroInClasse = True
+            y = y + 1
+
         y_sort = np.sort(y)
+        self.qtdClasses = y_sort[-1]
         
-        self.qtdClasses    = y_sort[-1]
+        self.setInstancias = X
+        self.setClassesIntancias = y        
+        
         self.qtdInstancias = np.size( self.setInstancias, 0 )
         self.qtdAtributos  = np.size( self.setInstancias, 1 )
 
@@ -181,7 +187,6 @@ class ENPC:
     def Quality( self, iPrototipo, jClasse ):
         
         return float( min( 1, self.Apportation( iPrototipo, jClasse ) * self.Accuracy( iPrototipo, jClasse ) ) )
-    
 
     def getInformation( self ):
 
@@ -215,7 +220,7 @@ class ENPC:
             self.V[i][j] = self.V[i][j] + [inst]
             
             inst = inst + 1
-
+            
         self.prune( )
         self.getQuality( )
 
@@ -368,12 +373,32 @@ class ENPC:
     def run_ENPC( self ):
         
         rd.seed(None)
+        
         i = rd.randrange(0, self.qtdInstancias-1)
 
-        self.R           = np.empty([1, np.size(self.setInstancias[0])])
-        self.Rclasses    = np.empty( 1 )
-        self.R[0]        = np.copy( self.setInstancias[i] )
-        self.Rclasses[0] = self.setClassesIntancias[i]
+        self.R = np.empty( [1, np.size(self.setInstancias[0])] )
+        self.Rclasses = np.empty( 1 )
+        self.R[0] = np.copy( self.setInstancias[i] )
+        self.Rclasses[0] = np.copy( self.setClassesIntancias[i] )
+        
+        maxQtdInitialPrototipes = 20
+        qtdInitialPrototipes = rd.randrange( 1, min(self.qtdInstancias, maxQtdInitialPrototipes+1) )
+        
+        listPrototipesAdd = []        
+        
+        prot = 2
+        while(  prot <  qtdInitialPrototipes ):
+            
+            i = rd.randrange(0, self.qtdInstancias-1)
+
+            if( i not in listPrototipesAdd ):
+                
+                listPrototipesAdd = listPrototipesAdd + [i]
+                
+                self.R        = np.concatenate( ( self.R       , [np.copy( self.setInstancias[i] )]       ), 0 )
+                self.Rclasses = np.concatenate( ( self.Rclasses, [np.copy( self.setClassesIntancias[i] )] ), 0 )
+            
+            prot = prot + 1
 
         iteracoes = 1
 
@@ -411,9 +436,12 @@ class ENPC:
             #print "Die: \n"
             self.die()
             #self.printInformation()
-            #print i
         
             iteracoes = iteracoes + 1
+            
+            
+        if( self._zeroInClasse ):
+            self.Rclasses = self.Rclasses - 1
 
 
     """
@@ -440,19 +468,19 @@ class RunnerRPS( Runner ):
 if __name__ == '__main__':
 
     
-    modulo = 'regular10'
+    modulo = 'imbalanced'
     
     if( modulo == 'regular10' ):
     
-        runner = RunnerRPS( folds=5, normalize=True, prefix='datasets', module=modulo )
-    
+        runner = RunnerRPS( folds=9, normalize=True, prefix='datasets', module=modulo )
+
         datasets =            ['glass'   , 'image_segmentation', 'ionosphere'   , 'iris'  ]
         datasets = datasets + ['liver'   , 'pendigits'         , 'pima_diabetes', 'sonar' ]
         datasets = datasets + ['spambase', 'vehicle'           , 'vowel'        , 'wine'  , 'yeast' ]
         
     elif( modulo == 'imbalanced' ):
     
-        runner = RunnerRPS( folds=9, normalize=True, prefix='datasets', module=modulo )
+        runner = RunnerRPS( folds=5, normalize=True, prefix='datasets', module=modulo )
     
         datasets =            ['glass1', 'ecoli-0_vs_1', 'iris0'           , 'glass0'          ]
         datasets = datasets + ['ecoli1', 'new-thyroid2', 'new-thyroid1'    , 'ecoli2'          ]
