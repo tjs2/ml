@@ -246,7 +246,7 @@ class ENPC:
                     
                 j = j + 1
             
-            if( qtdMax != 0 ):
+            if( qtdMax != np.size( self.V[i][self.Rclasses[i]-1], 0 ) ):
                 self.Rclasses[i] = classe
                 
             i = i + 1
