@@ -1,14 +1,14 @@
 # coding: utf-8
-from time       import time
-from mlcin.ENPC import ENPC
-from runner     import Runner
+from time import time
+from mlcin.prototypes.ENPC import ENPC
+from runner import Runner
 
 
 class RunnerRPS( Runner ):
 
     def get_prototypes(self, X, y):
 
-        enpc = ENPC( X, y )
+        enpc = ENPC( X, y, 3, 20 )
         enpc.run_ENPC()
         
         return enpc.getResult()
@@ -17,15 +17,18 @@ class RunnerRPS( Runner ):
 if __name__ == '__main__':
 
     
-    modulo = 'imbalanced'
+    modulo = 'regular10'
     
     if( modulo == 'regular10' ):
     
         runner = RunnerRPS( folds=9, normalize=True, prefix='datasets', module=modulo )
 
         datasets =            ['glass'   , 'image_segmentation', 'ionosphere'   , 'iris'  ]
+        """
+        datasets =            ['glass'   , 'image_segmentation', 'ionosphere'   , 'iris'  ]
         datasets = datasets + ['liver'   , 'pendigits'         , 'pima_diabetes', 'sonar' ]
         datasets = datasets + ['spambase', 'vehicle'           , 'vowel'        , 'wine'  , 'yeast' ]
+        """
         
     elif( modulo == 'imbalanced' ):
     

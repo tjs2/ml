@@ -13,29 +13,33 @@ from sklearn.neighbors import NearestNeighbors
 
 class ENPC:
     
+    #Flags
     _zeroInClasse = False
     
-    K = 3                               # KNN
-    
+    #Dados de entrada
     setInstancias       = None          # Conjunto de instancias
     setClassesIntancias = None          # Classes de cada instancia
 
+    #Dados internos
     V  = None                           # Guarda o Vij
     R  = None                           # Dados sobre o prototipo    
     Rclasses = None                     # Guarda a classe dos prototipos    
     quality  = None                     # Guarda o quality de cada prototipo
     
+    #Informacoes de quantidade
     qtdClasses    = None                # Guarda a quantidade de classes
     qtdAtributos  = None                # Guarda a quantidade de atributos
     qtdInstancias = None                # Guarda o numero de instancias que o conjunto de treinamento tem
     
+    #Parametros
     maxIteracoes = 10                   # Numero maximo que o algoritmo iterara
+    K = 3                               # KNN
 
 
     """
     " Construtor
     """
-    def __init__( self, X, y ):
+    def __init__( self, X, y, K, maxIteracoes ):
         
         if( 0 in y ):
             self._zeroInClasse = True
@@ -49,6 +53,9 @@ class ENPC:
         
         self.qtdInstancias = np.size( self.setInstancias, 0 )
         self.qtdAtributos  = np.size( self.setInstancias, 1 )
+
+        self.maxIteracoes = maxIteracoes
+        self.K = K
 
 
     """
@@ -96,14 +103,6 @@ class ENPC:
             prot = prot + 1
 
 
-    def getQuality( self ):
-        
-        prot, n = 0, np.size( self.R, 0 )
-        while( prot < n ):
-            self.quality[prot] = self.Quality( prot, self.Rclasses[prot] )
-            prot = prot + 1
-
-
     def sumRi( self, i ):
         
         sum, j = 0, 0   
@@ -112,6 +111,36 @@ class ENPC:
             j = j + 1
             
         return sum
+
+
+    def getRandomPrototypes( self ):
+        
+        maxQtdInitialPrototipes = 20
+        qtdInitialPrototipes = rd.randrange( 1, min(self.qtdInstancias, maxQtdInitialPrototipes+1) )
+        
+        listPrototipesAdd = []        
+        
+        prot = 2
+        while(  prot <  qtdInitialPrototipes ):
+            
+            i = rd.randrange(0, self.qtdInstancias-1)
+
+            if( i not in listPrototipesAdd ):
+                
+                listPrototipesAdd = listPrototipesAdd + [i]
+                
+                self.R        = np.concatenate( ( self.R       , [np.copy( self.setInstancias[i] )]       ), 0 )
+                self.Rclasses = np.concatenate( ( self.Rclasses, [np.copy( self.setClassesIntancias[i] )] ), 0 )
+            
+            prot = prot + 1
+
+
+    def getQuality( self ):
+            
+        prot, n = 0, np.size( self.R, 0 )
+        while( prot < n ):
+            self.quality[prot] = self.Quality( prot, self.Rclasses[prot] )
+            prot = prot + 1
 
 
     """
@@ -378,24 +407,7 @@ class ENPC:
         self.R[0] = np.copy( self.setInstancias[i] )
         self.Rclasses[0] = np.copy( self.setClassesIntancias[i] )
         
-        maxQtdInitialPrototipes = 20
-        qtdInitialPrototipes = rd.randrange( 1, min(self.qtdInstancias, maxQtdInitialPrototipes+1) )
-        
-        listPrototipesAdd = []        
-        
-        prot = 2
-        while(  prot <  qtdInitialPrototipes ):
-            
-            i = rd.randrange(0, self.qtdInstancias-1)
-
-            if( i not in listPrototipesAdd ):
-                
-                listPrototipesAdd = listPrototipesAdd + [i]
-                
-                self.R        = np.concatenate( ( self.R       , [np.copy( self.setInstancias[i] )]       ), 0 )
-                self.Rclasses = np.concatenate( ( self.Rclasses, [np.copy( self.setClassesIntancias[i] )] ), 0 )
-            
-            prot = prot + 1
+        self.getRandomPrototypes()
 
         iteracoes = 1
 
@@ -403,6 +415,8 @@ class ENPC:
         
             ## Get Information
             #print "Get Information: \n"
+            if( np.size( self.R, 0 ) == 0 ):
+                self.getRandomPrototypes()
             self.getInformation()
             #self.printInformation()
 
