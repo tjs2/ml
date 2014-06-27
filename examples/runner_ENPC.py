@@ -8,7 +8,7 @@ class RunnerRPS( Runner ):
 
     def get_prototypes(self, X, y):
 
-        enpc = ENPC( X, y, 3, 20 )
+        enpc = ENPC( X, y, 3, 200 )
         enpc.run_ENPC()
         
         return enpc.getResult()
@@ -22,13 +22,11 @@ if __name__ == '__main__':
     if( modulo == 'regular10' ):
     
         runner = RunnerRPS( folds=9, normalize=True, prefix='datasets', module=modulo )
-
-        datasets =            ['glass'   , 'image_segmentation', 'ionosphere'   , 'iris'  ]
-        """
+        
         datasets =            ['glass'   , 'image_segmentation', 'ionosphere'   , 'iris'  ]
         datasets = datasets + ['liver'   , 'pendigits'         , 'pima_diabetes', 'sonar' ]
         datasets = datasets + ['spambase', 'vehicle'           , 'vowel'        , 'wine'  , 'yeast' ]
-        """
+        
         
     elif( modulo == 'imbalanced' ):
     
@@ -37,7 +35,7 @@ if __name__ == '__main__':
         datasets =            ['glass1', 'ecoli-0_vs_1', 'iris0'           , 'glass0'          ]
         datasets = datasets + ['ecoli1', 'new-thyroid2', 'new-thyroid1'    , 'ecoli2'          ]
         datasets = datasets + ['glass6', 'glass2'      , 'shuttle-c2-vs-c4', 'glass-0-1-6_vs_5']
-    
+
     
     runner.set_datasets(datasets)
 

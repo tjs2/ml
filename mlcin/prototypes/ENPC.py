@@ -30,6 +30,7 @@ class ENPC:
     qtdClasses    = None                # Guarda a quantidade de classes
     qtdAtributos  = None                # Guarda a quantidade de atributos
     qtdInstancias = None                # Guarda o numero de instancias que o conjunto de treinamento tem
+    qtdInitialPrototypes = None         # Quantidade de prototipos que o algoritmo comecou
     
     #Parametros
     maxIteracoes = 10                   # Numero maximo que o algoritmo iterara
@@ -115,13 +116,13 @@ class ENPC:
 
     def getRandomPrototypes( self ):
         
-        maxQtdInitialPrototipes = 20
-        qtdInitialPrototipes = rd.randrange( 1, min(self.qtdInstancias, maxQtdInitialPrototipes+1) )
+        maxQtdInitialPrototypes = 20
+        self.qtdInitialPrototypes = rd.randrange( 2, min(self.qtdInstancias, maxQtdInitialPrototypes+1) )
         
         listPrototipesAdd = []        
         
-        prot = 2
-        while(  prot <  qtdInitialPrototipes ):
+        prot = 1
+        while(  prot <  self.qtdInitialPrototypes ):
             
             i = rd.randrange(0, self.qtdInstancias-1)
 
@@ -461,4 +462,6 @@ class ENPC:
     def getResult( self ):
         
         #print "Terminou"
+        print "Quantidade inicial de prototipos: ", self.qtdInitialPrototypes
+        print "Quantidade final de prototipos: ", np.size( self.R, 0 ), "\n"
         return self.R, self.Rclasses
