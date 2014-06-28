@@ -8,7 +8,7 @@ class RunnerRPS( Runner ):
 
     def get_prototypes(self, X, y):
 
-        enpc = ENPC( X, y, 3, 100 )
+        enpc = ENPC( X, y, 3, 200 )
         enpc.run_ENPC()
         
         return enpc.getResult()
