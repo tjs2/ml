@@ -22,11 +22,10 @@ if __name__ == '__main__':
     if( modulo == 'regular10' ):
     
         runner = RunnerRPS( folds=9, normalize=True, prefix='datasets', module=modulo )
-        
+
         datasets =            ['glass'   , 'image_segmentation', 'ionosphere'   , 'iris'  ]
         datasets = datasets + ['liver'   , 'pendigits'         , 'pima_diabetes', 'sonar' ]
         datasets = datasets + ['spambase', 'vehicle'           , 'vowel'        , 'wine'  , 'yeast' ]
-        
         
     elif( modulo == 'imbalanced' ):
     
