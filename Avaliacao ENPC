@@ -207,16 +207,17 @@ ENPC bases balanceadas:
 
 	base 'pendigits' - 6:
 
+		Quantidade inicial de prototipos:  13   14   07   10   04   14   09   05   05   03
+		Quantidade final de prototipos:    49   43   47   48   50   49   51   46   57   46
 
+		Tempo:  8929.53237796  Segundos
 
+		Quantidade de iteracoes: 100
 
+		Resultado:
 
-
-
-
-
-
-
+			Gen. Accuracy	Maj. Accuracy	Min. Accuracy	AUC. Accuracy	Data Reduction
+			0.95	0.01	0.96	0.01	0.87	0.05	0.92	0.03	1.00	0.00
 
 
 	base 'pima_diabetes' - 7:
