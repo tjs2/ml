@@ -8,7 +8,7 @@ class RunnerRPS( Runner ):
 
     def get_prototypes(self, X, y):
 
-        enpc = ENPC( X, y, 3, 200 )
+        enpc = ENPC( X, y, 3, 100 )
         enpc.run_ENPC()
         
         return enpc.getResult()
@@ -17,7 +17,7 @@ class RunnerRPS( Runner ):
 if __name__ == '__main__':
 
     
-    modulo = 'regular10'
+    modulo = 'imbalanced'
     
     if( modulo == 'regular10' ):
     

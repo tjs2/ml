@@ -1,3 +1,9 @@
+Configuração do PC:
+
+	CPU: Intel Core i7-2640 2.80GHz x4
+	RAM: 6.0 GB 
+	SO : Ubuntu 13.10 64-bit
+
 
 Dados:
 	Bases balanceadas: 
@@ -54,6 +60,78 @@ KNN bases balanceadas:
 
 ENPC bases desbalanceadas:
 
+
+	dataset 1:
+		Quantidade inicial de prototipos:  11   08   09   15   07
+		Quantidade final de prototipos:    10   28   17   19   24
+
+	dataset 2:
+		Quantidade inicial de prototipos:  02   14   12   17   19
+		Quantidade final de prototipos:    02   11   08   15   13
+
+	dataset 3:
+		Quantidade inicial de prototipos:  05   11   12   10   04
+		Quantidade final de prototipos:    05   10   09   08   03
+
+	dataset 4:
+		Quantidade inicial de prototipos:  03   19   04   07   04
+		Quantidade final de prototipos:    25   14   22   18   18
+
+	dataset 5:
+		Quantidade inicial de prototipos:  15   08   18   11   19
+		Quantidade final de prototipos:    28   04   15   13   19
+
+	dataset 6:
+		Quantidade inicial de prototipos:  18   10   08   05   10
+		Quantidade final de prototipos:    05   09   09   03   10
+
+	dataset 7:
+		Quantidade inicial de prototipos:  04   16   08   12   06
+		Quantidade final de prototipos:    03   14   10   15   03
+
+	dataset 8:
+		Quantidade inicial de prototipos:  15   02   06   10   05
+		Quantidade final de prototipos:    12   02   08   11   06
+
+	dataset 9:
+		Quantidade inicial de prototipos:  18   05   08   05   14
+		Quantidade final de prototipos:    02   03   02   03   02
+
+	dataset 10:
+		Quantidade inicial de prototipos:  15   15   17   10   16
+		Quantidade final de prototipos:    07   06   21   03   06
+
+	dataset 11:
+		Quantidade inicial de prototipos:  20   20   19   17   20
+		Quantidade final de prototipos:    08   08   09   10   06
+
+	dataset 12:
+		Quantidade inicial de prototipos:  17   04   02   17   06
+		Quantidade final de prototipos:    01   01   01   08   01
+
+
+	Tempo:  289.082093  Segundos = 4,80 Minutos
+
+	Quantidade de iteracoes: 100
+
+	Resultado:
+
+		dataset	Gen. Accuracy	Maj. Accuracy	Min. Accuracy	AUC. Accuracy	Data Reduction
+		1	0.80	0.03	0.85	0.04	0.71	0.04	0.78	0.03	0.89	0.04	
+		2	0.98	0.02	0.95	0.05	1.00	0.00	0.97	0.02	0.94	0.03	
+		3	1.00	0.00	1.00	0.00	1.00	0.00	1.00	0.00	0.94	0.02	
+		4	0.79	0.07	0.81	0.06	0.74	0.12	0.78	0.08	0.89	0.02	
+		5	0.91	0.04	0.95	0.05	0.78	0.13	0.87	0.06	0.94	0.03	
+		6	0.95	0.04	0.98	0.02	0.83	0.17	0.90	0.09	0.96	0.02	
+		7	0.98	0.02	0.98	0.02	1.00	0.00	0.99	0.01	0.95	0.03	
+		8	0.95	0.02	0.96	0.03	0.91	0.06	0.93	0.03	0.97	0.01	
+		9	0.90	0.06	0.91	0.07	0.83	0.15	0.87	0.08	0.99	0.00	
+		10	0.87	0.07	0.93	0.10	0.15	0.30	0.54	0.10	0.95	0.04	
+		11	0.99	0.02	1.00	0.00	0.90	0.20	0.95	0.10	0.92	0.01	
+		12	0.95	0.01	0.99	0.01	0.10	0.20	0.55	0.09	0.98	0.02
+
+
+
 	dataset 1:
 		Quantidade inicial de prototipos:  16   19   13   08   06
 		Quantidade final de prototipos:    18   31   27   17   22
@@ -103,7 +181,7 @@ ENPC bases desbalanceadas:
 		Quantidade final de prototipos:    02   01   01   07   01
 
 
-	Tempo:  547.914063931  segundos
+	Tempo:  547.914063931  segundos = 9,1 Minutos
 
 	Quantidade de iteracoes: 200
 
@@ -121,7 +199,7 @@ ENPC bases desbalanceadas:
 		9	0.90	0.05	0.91	0.06	0.83	0.15	0.87	0.07	0.98	0.01	
 		10	0.89	0.04	0.97	0.05	0.00	0.00	0.48	0.02	0.97	0.01	
 		11	0.99	0.02	1.00	0.00	0.90	0.20	0.95	0.10	0.95	0.02	
-		12	0.94	0.03	0.98	0.03	0.10	0.20	0.54	0.08	0.98	0.02	
+		12	0.94	0.03	0.98	0.03	0.10	0.20	0.54	0.08	0.98	0.02
 
 
 
@@ -135,7 +213,7 @@ ENPC bases balanceadas:
 		Quantidade inicial de prototipos:  18   20   19   19   18   17   09   16   16   17
 		Quantidade final de prototipos:    65   61   58   60   62   56   62   65   62   62
 
-		Tempo:  354.412220001  Segundos
+		Tempo:  354.412220001  Segundos = 5,90 Minutos
 
 		Quantidade de iteracoes: 100
 
@@ -148,7 +226,7 @@ ENPC bases balanceadas:
 		Quantidade inicial de prototipos:  17   04   08   13   16   20   03   20   04   06
 		Quantidade final de prototipos:    67   60   56   66   57   54   58   62   62   68
 
-		Tempo:  796.527366161  Segundos
+		Tempo:  796.527366161  Segundos = 13,30 Minutos
 
 		Quantidade de iteracoes: 200
 
@@ -163,7 +241,7 @@ ENPC bases balanceadas:
 		Quantidade inicial de prototipos:  18   17   17   06   03   08   05   07   07   18
 		Quantidade final de prototipos:    51   52   56   46   52   56   47   57   43   58
 
-		Tempo:  2428.55623698  Segundos
+		Tempo:  2428.55623698  Segundos = 40,50 Minutos
 
 		Quantidade de iteracoes: 100
 
@@ -176,7 +254,7 @@ ENPC bases balanceadas:
 		Quantidade inicial de prototipos:  06   06   16   10   08   10   19   04   04   16
 		Quantidade final de prototipos:    38   47   47   50   55   63   54   54   50   58
 
-		Tempo:  5156.20393014  Segundos
+		Tempo:  5156.20393014  Segundos = 86,00 Minutos
 
 		Quantidade de iteracoes: 200
 
@@ -204,7 +282,7 @@ ENPC bases balanceadas:
 		Quantidade inicial de prototipos:  04   14   18   19   12   08   18   13   16   10
 		Quantidade final de prototipos:    07   18   10   07   08   09   07   05   15   10
 
-		Tempo:  160.559035063  Segundos
+		Tempo:  160.559035063  Segundos = 2,70 Minutos
 
 		Quantidade de iteracoes: 200
 
@@ -247,7 +325,7 @@ ENPC bases balanceadas:
 		Quantidade inicial de prototipos:  19   07    13    15    09    20    12    14    11    13
 		Quantidade final de prototipos:   108   98   106   111   104   110   114   100   116   103
 
-		Tempo:  1013.01319885  Segundos
+		Tempo:  1013.01319885  Segundos = 16,90 Minutos
 
 		Quantidade de iteracoes: 100
 
@@ -260,7 +338,7 @@ ENPC bases balanceadas:
 		Quantidade inicial de prototipos:  03    06    07    11    12    04    15    17    15    15
 		Quantidade final de prototipos:   105   104   110   104   101   111   110   106   111   100
 
-		Tempo:  2028.55932379  Segundos
+		Tempo:  2028.55932379  Segundos = 33,90 Minutos
 
 		Quantidade de iteracoes: 200
 
@@ -272,10 +350,23 @@ ENPC bases balanceadas:
 
 	base 'pendigits' - 6:
 
+		Quantidade inicial de prototipos:  18   15   07   17   15   17   20   15   14   02
+		Quantidade final de prototipos:    45   38   41   45   41   42   34   39   53   45
+
+		Tempo:  3936.372504  Segundos = 65,70 Minutos
+
+		Quantidade de iteracoes: 50
+
+		Resultado
+
+			Gen. Accuracy	Maj. Accuracy	Min. Accuracy	AUC. Accuracy	Data Reduction
+			0.94	0.03	0.94	0.03	0.90	0.06	0.92	0.03	1.00	0.00
+
+
 		Quantidade inicial de prototipos:  13   14   07   10   04   14   09   05   05   03
 		Quantidade final de prototipos:    49   43   47   48   50   49   51   46   57   46
 
-		Tempo:  8929.53237796  Segundos
+		Tempo:  8929.53237796  Segundos = 2,50 Horas
 
 		Quantidade de iteracoes: 100
 
@@ -290,7 +381,7 @@ ENPC bases balanceadas:
 		Quantidade inicial de prototipos:  16    09    11    20    05    09    09    02    08   02
 		Quantidade final de prototipos:   137   153   168   124   143   172   162   134   130   98
 
-		Tempo:  1722.62817287  Segundos
+		Tempo:  1722.62817287  Segundos = 28,70 Minutos
 
 		Quantidade de iteracoes: 100
 
@@ -303,7 +394,7 @@ ENPC bases balanceadas:
 		Quantidade inicial de prototipos:  17    15    13    08    07    08    14    14    09    02
 		Quantidade final de prototipos:   173   148   202   166   184   163   153   181   158   165
 
-		Tempo:  5046.07912207  Segundos
+		Tempo:  5046.07912207  Segundos = 1,40 Hora
 
 		Quantidade de iteracoes: 200
 
@@ -318,7 +409,7 @@ ENPC bases balanceadas:
 		Quantidade inicial de prototipos:  08   03   12   19   18   15   18   13   04   10
 		Quantidade final de prototipos:    22   20   21   25   25   23   25   24   20   23
 
-		Tempo:  126.110738993  Segundos
+		Tempo:  126.110738993  Segundos = 2,2 Minutos
 
 		Quantidade de iteracoes: 100
 
@@ -331,7 +422,7 @@ ENPC bases balanceadas:
 		Quantidade inicial de prototipos:  16   06   13   15   02   19   03   04   02   13
 		Quantidade final de prototipos:    25   19   21   21   25   22   20   17   19   27
 
-		Tempo:  220.913121939  Segundos
+		Tempo:  220.913121939  Segundos = 3,70 Minutos
 
 		Quantidade de iteracoes: 200
 
@@ -346,7 +437,7 @@ ENPC bases balanceadas:
 		Quantidade inicial de prototipos:  20   14   20   10   10   11   19   17   12   06
 		Quantidade final de prototipos:    05   02   25   10   02   21   20   06   05   20
 
-		Tempo:  1070.54396987  Segundos
+		Tempo:  1070.54396987  Segundos = 17,90 Minutos
 
 		Quantidade de iteracoes: 100
 
@@ -359,7 +450,7 @@ ENPC bases balanceadas:
 		Quantidade inicial de prototipos:  13   16   04   11   17   11   12   02   12   03
 		Quantidade final de prototipos:    26   03   10   06   20   11   09   03   05   15
 
-		Tempo:  2439.01835608  Segundos
+		Tempo:  2439.01835608  Segundos = 40,70 Minutos
 
 		Quantidade de iteracoes: 200
 
@@ -371,10 +462,23 @@ ENPC bases balanceadas:
 
 	base 'vehicle' - 10:
 
+		Quantidade inicial de prototipos:  04    20    09    16    16    13    18    12    09    18
+		Quantidade final de prototipos:   200   181   212   198   206   213   208   210   194   217
+
+		Tempo:  4018.65237713  Segundos = 1,10 Hora
+
+		Quantidade de iteracoes: 100
+
+		Resultado:
+
+			Gen. Accuracy	Maj. Accuracy	Min. Accuracy	AUC. Accuracy	Data Reduction
+			0.65	0.03	0.71	0.05	0.49	0.13	0.60	0.05	0.73	0.01
+
+
 		Quantidade inicial de prototipos:  14    12    11    06    08    08    08    13    18    09
 		Quantidade final de prototipos:   205   201   194   194   209   203   205   203   197   211
 
-		Tempo:  9101.72176099  Segundos
+		Tempo:  9101.72176099  Segundos = 2,50 Horas
 
 		Quantidade de iteracoes: 200
 
@@ -389,7 +493,7 @@ ENPC bases balanceadas:
 		Quantidade inicial de prototipos:  06   17   16   05   08   03   06   19   02   19
 		Quantidade final de prototipos:    74   72   71   76   73   72   72   77   74   76
 
-		Tempo:  1032.00652814  Segundos
+		Tempo:  1032.00652814  Segundos = 17,20 Minutos
 
 		Quantidade de iteracoes: 100
 
@@ -402,7 +506,7 @@ ENPC bases balanceadas:
 		Quantidade inicial de prototipos:  16   05   03   05   04   17   11   15   02   17
 		Quantidade final de prototipos:    73   73   75   77   75   73   73   76   71   73
 
-		Tempo:  2017.23198891  Segundos
+		Tempo:  2017.23198891  Segundos = 33,70 Minutos
 
 		Quantidade de iteracoes: 200
 
@@ -430,7 +534,7 @@ ENPC bases balanceadas:
 		Quantidade inicial de prototipos:  06   06   08   14   14   09   15   11   20   13
 		Quantidade final de prototipos:    04   07   10   09   08   08   11   08   11   12
 
-		Tempo:  84.2792069912  Segundos
+		Tempo:  84.2792069912  Segundos = 1,40 Minuto
 
 		Quantidade de iteracoes: 200
 
@@ -445,7 +549,7 @@ ENPC bases balanceadas:
 		Quantidade inicial de prototipos:  08    02    20    20    08    10    11    04    03    10
 		Quantidade final de prototipos:   567   311   643   647   501   593   642   610   590   624
 
-		Tempo:  5294.2410121  Segundos
+		Tempo:  5294.2410121  Segundos = 1,50 Hora
 
 		Quantidade de iteracoes: 50
 
@@ -454,3 +558,15 @@ ENPC bases balanceadas:
 			Gen. Accuracy	Maj. Accuracy	Min. Accuracy	AUC. Accuracy	Data Reduction
 			0.48	0.03	0.49	0.04	0.45	0.06	0.47	0.04	0.57	0.07
 
+
+		Quantidade inicial de prototipos:  13    07    17    06    13    11    19    09    17    11
+		Quantidade final de prototipos:   669   635   640   650   668   640   636   659   673   634
+
+		Tempo:  21860.106123  Segundos = 6,10 Horas
+
+		Quantidade de iteracoes: 100
+
+		Resultado:
+
+			Gen. Accuracy	Maj. Accuracy	Min. Accuracy	AUC. Accuracy	Data Reduction
+			0.50	0.03	0.51	0.05	0.48	0.06	0.49	0.03	0.51	0.01
