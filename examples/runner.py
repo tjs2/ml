@@ -39,8 +39,8 @@ class Runner(object):
     def run(self):
         for index, dataset in enumerate(self.datasets):
             results = []
-            #for fold in range(0, self.folds + 1): # Para base balanceada
-            for fold in range(1, self.folds + 1): # Para base desbalanceada
+            for fold in range(0, self.folds + 1): # Para base balanceada
+            #for fold in range(1, self.folds + 1): # Para base desbalanceada
                 X_tra, y_tra = keel.load_keel_dataset(
                     dataset, fold, 'tra', self.prefix, self.module, fold_count=self.folds)
                 X_tst, y_tst = keel.load_keel_dataset(
